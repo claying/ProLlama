@@ -1,0 +1,49 @@
+# @package _global_
+
+defaults:
+  - _self_
+  - datamodule: swissprot
+  - mode: default
+
+debug: false
+seed: 0
+wandb: false
+
+datamodule:
+  batch_size: 128
+  pin_memory: True
+  num_workers: 8
+  truncation_length: 512
+
+trainer:
+  _target_: pytorch_lightning.Trainer
+  accelerator: auto
+  precision: bf16-true
+  strategy: auto
+  devices: auto
+  default_root_dir: ${logs.path}
+  num_sanity_val_steps: 0
+
+sampling:
+  num_samples: 10
+  top_k: 10
+  temperature: 1.0
+  max_length: 1024
+  batch_size: ${eval:2 * ${datamodule.batch_size}}
+
+model:
+  _target_: prollama.model.get_llama_model
+  model_name: llama-xs
+  pretrained_path: null
+
+logs:
+  prefix: logs/generate/${datamodule.dataset_name}/${model.model_name}/${seed}
+  path: ${logs.prefix}/runs/${now:%Y-%m-%d}_${now:%H-%M-%S}
+
+# output directory, generated dynamically on each run
+hydra:
+  run:
+    dir: ${logs.path}
+  sweep:
+    dir: ${logs.prefix}/multiruns/train/${now:%Y-%m-%d}_${now:%H-%M-%S}
+    subdir: ${hydra.job.num}

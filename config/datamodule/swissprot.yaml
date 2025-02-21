@@ -1,0 +1,3 @@
+_target_: prollama.data.ProteinDataset
+root: ./datasets/SwissProt
+dataset_name: swissprot

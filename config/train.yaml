@@ -1,0 +1,66 @@
+# @package _global_
+
+defaults:
+  - _self_
+  - datamodule: swissprot
+  - mode: default
+
+debug: false
+seed: 0
+wandb: false
+
+datamodule:
+  batch_size: 128
+  pin_memory: True
+  num_workers: 8
+  truncation_length: 512
+
+trainer:
+  _target_: pytorch_lightning.Trainer
+  accelerator: auto
+  precision: bf16-true
+  max_steps: 200000
+  log_every_n_steps: 100
+  val_check_interval: 1000
+  check_val_every_n_epoch: null
+  gradient_clip_val: 1.0
+  strategy: auto
+  devices: auto
+  default_root_dir: ${logs.path}
+  num_sanity_val_steps: 0
+  accumulate_grad_batches: 8
+
+train:
+  optimizer:
+    _target_: torch.optim.AdamW
+    lr: 6e-04
+    weight_decay: 0.1
+    betas: [0.9, 0.95]
+  lr_scheduler:
+    _target_: transformers.get_cosine_schedule_with_warmup
+    num_warmup_steps: ${eval:0.01 * ${trainer.max_steps}}
+    num_training_steps: ${trainer.max_steps}
+
+sampling:
+  num_samples: 1000
+  top_k: 10
+  temperature: 1.0
+  max_length: 1024
+  batch_size: ${eval:2 * ${datamodule.batch_size}}
+
+model:
+  _target_: prollama.model.get_llama_model
+  model_name: llama-xs
+  pretrained_path: null
+
+logs:
+  prefix: logs/train/${datamodule.dataset_name}/${model.model_name}/${seed}
+  path: ${logs.prefix}/runs/${now:%Y-%m-%d}_${now:%H-%M-%S}
+
+# output directory, generated dynamically on each run
+hydra:
+  run:
+    dir: ${logs.path}
+  sweep:
+    dir: ${logs.prefix}/multiruns/train/${now:%Y-%m-%d}_${now:%H-%M-%S}
+    subdir: ${hydra.job.num}
