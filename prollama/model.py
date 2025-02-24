@@ -120,7 +120,8 @@ class ProLlama(pl.LightningModule):
         )
         seq_list = []
         for i in range(batch_size):
-            tok_seq = toks[i][1:-1]
+            tok_seq = toks[i][1:]
+            tok_seq = tok_seq[(tok_seq != self.alphabet.eos_idx) & (tok_seq != self.alphabet.padding_idx)]
             seq = "".join([self.alphabet.get_tok(tok.item()) for tok in tok_seq])
             seq_list.append(seq)
         return seq_list

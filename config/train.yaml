@@ -50,7 +50,7 @@ sampling:
 
 model:
   _target_: prollama.model.get_llama_model
-  model_name: llama-xs
+  model_name: llama-xs # support llama-xs and llama-s
   pretrained_path: null
 
 logs:

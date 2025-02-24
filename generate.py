@@ -37,7 +37,7 @@ def main(cfg):
     else:
         trainer.validate(model, datamodule)
 
-    samples = samples = model.generate()
+    samples = model.generate()
     print("Generated samples: ")
     for sample in samples:
         print(sample)
