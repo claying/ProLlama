@@ -29,5 +29,5 @@ python generate.py model.pretrained_path=${path_to_your_pretrained_model} sampli
 [1]: https://lightning.ai/
 [2]: https://hydra.cc/
 [3]: https://huggingface.co/docs/transformers/main/en/model_doc/llama
-[4]: https://dexiong.me/blogs/2025-02-18-lightning-and-hydra/
+[4]: https://dexiong.me/blogs/2025-02-24-lightning-and-hydra/
 
