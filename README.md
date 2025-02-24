@@ -2,7 +2,7 @@
 A minimal implementation for training a Llama model on protein sequences from scratch with less than 500 lines of code.
 
 The repository largely relies on [Lightning][1], [Hydra][2] and [HuggingFace's Llama][3] implementation.
-You can find my tutorial [here][4]
+You can find my tutorial [here][4].
 
 ## Install
 

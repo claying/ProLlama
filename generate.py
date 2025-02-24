@@ -40,7 +40,7 @@ def main(cfg):
     samples = model.generate()
     print("Generated samples: ")
     for i, sample in enumerate(samples):
-        print(f"Generated protein {i}: {sample}")
+        print(f"Protein {i + 1}: {sample}")
 
 
 if __name__ == "__main__":
