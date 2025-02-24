@@ -19,6 +19,7 @@ log = logging.getLogger(__name__)
 )
 def main(cfg):
     log.info(f"Configs:\n{OmegaConf.to_yaml(cfg)}")
+    log.info(f"Resolved configs:\n{OmegaConf.to_container(cfg, resolve=True)}")
     pl.seed_everything(cfg.seed, workers=True)
 
     # Instantiate your model
